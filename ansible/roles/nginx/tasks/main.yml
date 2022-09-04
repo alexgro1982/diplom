@@ -1,0 +1,26 @@
+---
+# tasks file for nginx
+  - name: Configure Nginx repo
+    ansible.builtin.template:
+      src: "nginx.repo"
+      dest: "/etc/yum.repos.d/nginx.repo"
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Install EPEL
+    ansible.builtin.yum:
+      name:
+        - epel-release
+      state: present
+
+  - name: Install Nginx and Certbot
+    ansible.builtin.yum:
+      update_cache: yes
+      name:
+        - nginx
+        - certbot
+      state: latest
+
+
+
