@@ -22,5 +22,6 @@
         - certbot
       state: latest
 
-
+  - import_tasks: conf_nginx.yml
+  
 

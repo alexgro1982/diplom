@@ -1,2 +1,36 @@
 ---
 # defaults file for nginx
+
+nginx_upstreams:
+- name: wordpress
+  servers:
+    - "192.168.50.20:80"
+- name: gitlab
+  servers:
+    - "192.168.50.30:80"
+- name: grafana
+  servers:
+    - "192.168.50.40:80"
+- name: prometheus
+  servers:
+    - "192.168.50.50:80"
+- name: alertmanager
+  servers:
+    - "192.168.50.60:80"
+
+nginx_vhosts:
+- server_name: "www.netology.aklmz.ru"
+  listen: "80"
+  upstream: "wordpress"
+- server_name: "gitlab.netology.aklmz.ru"
+  listen: "80"
+  upstream: "gitlab"
+- server_name: "grafana.netology.aklmz.ru"
+  listen: "80"
+  upstream: "grafana"
+- server_name: "prometheus.netology.aklmz.ru"
+  listen: "80"
+  upstream: "prometheus"
+- server_name: "alertmanager.netology.aklmz.ru"
+  listen: "80"
+  upstream: "alertmanager"

@@ -1,0 +1,26 @@
+---
+#Config nginx
+- name: Delete default host
+  ansible.builtin.file:
+    path: "/etc/nginx/conf.d/default.conf"
+    state: absent
+  notify: restart nginx
+
+- name: Replace main config file
+  ansible.builtin.template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/nginx.conf"
+    force: true
+  notify: restart nginx
+
+
+- name: Add vhost config files
+  ansible.builtin.template:
+    src: "vhost.conf.j2"
+    dest: "/etc/nginx/conf.d/{{item.server_name}}.conf"
+    force: true
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{nginx_vhosts}}"
+  notify: restart nginx

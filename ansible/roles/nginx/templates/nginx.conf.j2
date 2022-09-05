@@ -27,5 +27,13 @@ http {
 
     #gzip  on;
 
+{% for upstream in nginx_upstreams %}
+    upstream {{upstream.name}} {
+    {% for server in upstream.servers %}
+	server {{server}};
+    {%endfor%}
+	}
+{% endfor %}
+
     include /etc/nginx/conf.d/*.conf;
 }
