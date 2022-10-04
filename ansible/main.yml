@@ -1,6 +1,62 @@
 ---
-- name: Install Elasticsearch
+- name: Install Nginx
   hosts: nginx
   become: true
   roles:
     - nginx
+    - node_exporter
+  tags: nginx
+
+- name: Install mysql master
+  hosts: master
+  become: true
+  roles:
+    - mysql
+    - node_exporter
+  vars:
+    mysql_server_id: 1
+    mysql_repl_role: master
+
+- name: Install mysql slave
+  hosts: slave
+  become: true
+  roles:
+    - mysql
+    - node_exporter
+  vars:
+    mysql_server_id: 2
+    mysql_repl_role: slave
+
+- name: Install WordPress server
+  hosts: app
+  become: true
+  roles:
+    - wordpress
+    - node_exporter
+
+- name: Install gitlab server
+  hosts: gitlab
+  become: true
+  roles:
+    - gitlab
+    - node_exporter
+  tags: gitlab
+
+- name: Install gitlab runner server
+  hosts: runner
+  vars_prompt:
+    - name: runner_registration_token
+      prompt: Enter runner registration token from UI
+      private: no
+  become: true
+  roles:
+    - runner
+    - node_exporter
+  tags: runner
+
+- name: Install monitoring server
+  hosts: monitoring
+  become: true
+  roles:
+    - monitor
+  tags: monitor

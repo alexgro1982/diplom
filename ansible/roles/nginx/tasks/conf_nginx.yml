@@ -1,5 +1,18 @@
 ---
 #Config nginx
+- name: Create directrory for ssl cert
+  file:
+    state: directory
+    path: "/etc/pki/nginx/groshev.site"
+
+- name: Copy cert
+  copy:
+    src: "{{item}}"
+    dest: /etc/pki/nginx/groshev.site
+  loop:
+    - cert.pem
+    - privkey.pem
+
 - name: Delete default host
   ansible.builtin.file:
     path: "/etc/nginx/conf.d/default.conf"

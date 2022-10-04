@@ -7,30 +7,25 @@ nginx_upstreams:
     - "192.168.50.20:80"
 - name: gitlab
   servers:
-    - "192.168.50.30:80"
+    - "192.168.50.31:80"
 - name: grafana
   servers:
-    - "192.168.50.40:80"
+    - "192.168.50.40:3000"
 - name: prometheus
   servers:
-    - "192.168.50.50:80"
+    - "192.168.50.40:9090"
 - name: alertmanager
   servers:
-    - "192.168.50.60:80"
+    - "192.168.50.40:9093"
 
 nginx_vhosts:
-- server_name: "www.netology.aklmz.ru"
-  listen: "80"
+- server_name: "www.groshev.site groshev.site"
   upstream: "wordpress"
-- server_name: "gitlab.netology.aklmz.ru"
-  listen: "80"
+- server_name: "gitlab.groshev.site"
   upstream: "gitlab"
-- server_name: "grafana.netology.aklmz.ru"
-  listen: "80"
+- server_name: "grafana.groshev.site"
   upstream: "grafana"
-- server_name: "prometheus.netology.aklmz.ru"
-  listen: "80"
+- server_name: "prometheus.groshev.site"
   upstream: "prometheus"
-- server_name: "alertmanager.netology.aklmz.ru"
-  listen: "80"
+- server_name: "alertmanager.groshev.site"
   upstream: "alertmanager"
