@@ -1,0 +1,36 @@
+---
+# tasks file for runner
+- name: Get Gitlab Runner config script
+  get_url:
+    url: "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.rpm.sh"
+    dest: "/tmp/script.rpm.sh"
+    mode: 0755
+    timeout: 60
+    force: true
+    validate_certs: false
+  register: get_gitlab
+  until: get_gitlab
+
+- name: Execute config script
+  shell: /tmp/script.rpm.sh
+
+- name: Install Gitlab Runner packages
+  ansible.builtin.yum:
+    name:
+      - gitlab-runner
+    state: latest
+
+- name: Add IP to /etc/hosts
+  lineinfile:
+    dest: /etc/hosts
+    line: '192.168.50.31 gitlab.groshev.site'
+    state: present
+
+- name: Register runner
+  shell: |
+    gitlab-runner register \
+    --non-interactive \
+    --url="http://gitlab.groshev.site" \
+    --registration-token="{{ runner_registration_token }}" \
+    --executor="shell"
+  tags: RegisterRunner

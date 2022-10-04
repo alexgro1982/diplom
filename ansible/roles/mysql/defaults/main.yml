@@ -1,0 +1,10 @@
+---
+# defaults file for mysql
+
+mysql_user: wordpress
+mysql_password: wordpress
+
+mysql_repl_user: repl
+mysql_repl_password: repl
+
+mysql_root_pass: rootpass

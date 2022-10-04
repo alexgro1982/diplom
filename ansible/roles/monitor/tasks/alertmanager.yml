@@ -1,0 +1,57 @@
+---
+#Install AlertManager
+- name: Download alertmanager
+  get_url:
+    url: "https://github.com/prometheus/alertmanager/releases/download/v{{ alertmanager_version }}/alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
+    mode: 0755
+    timeout: 60
+    force: true
+    validate_certs: false
+  register: get_alertm
+  until: get_alertm is succeeded
+
+- name: Create directrory for alertmanager
+  file:
+    owner: prometheus
+    group: prometheus
+    state: directory
+    path: "{{ alertmanager_home }}"
+
+- name: Create config directrory for alertmanager
+  file:
+    state: directory
+    path: "/etc/alertmanager"
+
+- name: Extract alertmanager
+  unarchive:
+    owner: prometheus
+    group: prometheus
+    copy: false
+    src: "/tmp/alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
+    dest: "{{ alertmanager_home }}"
+    extra_opts: [--strip-components=1]
+#      creates: "{{ elastic_home }}/bin/elasticsearch"
+
+#  - name: Set environment Elastic
+#    become: yes
+#    template:
+#      src: templates/elk.sh.j2
+#      dest: /etc/profile.d/elk.sh
+#    tags: elastic
+
+- name: Replace main config file
+  template:
+    src: "alertmanager.yml.j2"
+    dest: "/etc/alertmanager/alertmanager.yml"
+    force: true
+  notify: restart alertmanager
+
+- name: Copy the alertmanager systemd service file
+  template:
+    src: alertmanager.service.j2
+    dest: /etc/systemd/system/alertmanager.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart alertmanager

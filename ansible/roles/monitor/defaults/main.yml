@@ -1,0 +1,23 @@
+---
+# defaults file for monitor
+prometheus_version: "2.37.1"
+prometheus_home: "/opt/prometheus"
+
+monitor_nodes:
+  - name: "nginx"
+    addr: "192.168.50.10:9101"
+  - name: "db1"
+    addr: "192.168.50.101:9101"
+  - name: "db2"
+    addr: "192.168.50.102:9101"
+  - name: "app"
+    addr: "192.168.50.20:9101"
+  - name: "gitlab"
+    addr: "192.168.50.31:9101"
+  - name: "runner"
+    addr: "192.168.50.32:9101"
+
+alertmanager_version: "0.24.0"
+alertmanager_home: "/opt/alertmanager"
+
+grafana_home: "/opt/grafana"

@@ -1,0 +1,24 @@
+---
+# tasks file for gitlab
+- name: Get gitlab config script
+  get_url:
+    url: "https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh"
+    dest: "/tmp/script.rpm.sh"
+    mode: 0755
+    timeout: 60
+    force: true
+    validate_certs: false
+  register: get_gitlab
+  until: get_gitlab
+
+- name: Execute config script
+  shell: /tmp/script.rpm.sh
+
+- name: Install Gitlab packages
+  ansible.builtin.yum:
+    name:
+      - gitlab-ce
+    state: latest
+  environment:
+    EXTERNAL_URL: "http://gitlab.groshev.site"
+    GITLAB_ROOT_PASSWORD: "testing1234"

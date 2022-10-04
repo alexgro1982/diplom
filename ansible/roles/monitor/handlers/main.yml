@@ -1,0 +1,22 @@
+---
+# handlers file for monitor
+- name: restart prometheus
+  become: true
+  systemd:
+    daemon_reload: true
+    name: prometheus
+    state: restarted
+
+- name: restart grafana
+  become: true
+  systemd:
+    daemon_reload: true
+    name: grafana
+    state: restarted
+
+- name: restart alertmanager
+  become: true
+  systemd:
+    daemon_reload: true
+    name: alertmanager
+    state: restarted

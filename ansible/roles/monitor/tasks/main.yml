@@ -1,0 +1,21 @@
+---
+# tasks file for monitor
+- name: Create the prometheus group
+  group:
+    name: "prometheus"
+    state: present
+    system: true
+
+- name: Create the prometheus user
+  user:
+    name: "prometheus"
+    groups: "prometheus"
+    append: true
+    shell: /usr/sbin/nologin
+    system: true
+    create_home: false
+    home: /home/prometheus
+
+- import_tasks: prometheus.yml
+- import_tasks: alertmanager.yml
+- import_tasks: grafana.yml
